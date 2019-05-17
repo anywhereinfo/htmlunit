@@ -26,16 +26,20 @@ public class DemoApplication implements CommandLineRunner {
 	public void run(String... args) throws Exception {
 		// TODO Auto-generated method stub
 		int numberOfThreads = Integer.parseInt(args[0]);
+		int startIndex = Integer.parseInt(args[1]);
+		int endIndex = startIndex + numberOfThreads;
+		
 		if (numberOfThreads > 1001) {
 			System.out.println("Number of threads cannot exceed 1001");
 			System.exit(0);
 		}
 		List<UsernamePassword> userList = new ArrayList<UsernamePassword>();
-		userList.add(new UsernamePassword("mbatth1", "Test@123"));
+//		userList.add(new UsernamePassword("mbatth1", "Test@123"));
 		IntStream.range(1, 1001).forEach(i -> userList.add(new UsernamePassword("uatptuser"+i, "Test@123")));
 		logger.info("Starting thread count: " +  numberOfThreads);
 		executorService = Executors.newFixedThreadPool(numberOfThreads);
-		IntStream.range(0, numberOfThreads).forEach(i -> {
+	
+		IntStream.range(startIndex, endIndex).forEach(i -> {
 			try {
 				UsernamePassword credentials = userList.get(i);
 				System.out.println("Starting user: " + credentials.userName);
