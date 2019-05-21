@@ -36,6 +36,8 @@ public class DemoApplication implements CommandLineRunner {
 		List<UsernamePassword> userList = new ArrayList<UsernamePassword>();
 //		userList.add(new UsernamePassword("mbatth1", "Test@123"));
 		IntStream.range(1, 1001).forEach(i -> userList.add(new UsernamePassword("uatptuser"+i, "Test@123")));
+//		IntStream.range(2, 7).forEach(i -> userList.add(new UsernamePassword("prdptuser"+i, "Test@123")));
+
 		logger.info("Starting thread count: " +  numberOfThreads);
 		executorService = Executors.newFixedThreadPool(numberOfThreads);
 	
