@@ -41,11 +41,11 @@ public class DemoApplication implements CommandLineRunner {
 			System.exit(0);
 		}
 		List<UsernamePassword> userList = new ArrayList<UsernamePassword>();
-		userList.add(new UsernamePassword("prdptuser1", "Glypti96"));
+
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ");
 		System.out.println("Starting Test at: " + sdf.format(new Date()));
-//		IntStream.range(1, 1001).forEach(i -> userList.add(new UsernamePassword("uatptuser"+i, "Test@123")));
-		IntStream.range(2, 7).forEach(i -> userList.add(new UsernamePassword("prdptuser"+i, "Test@123")));
+//		IntStream.range(1, 1001).forEach(i -> userList.add(new UsernamePassword(""+i, "")));
+		IntStream.range(2, 7).forEach(i -> userList.add(new UsernamePassword(""+i, "")));
 
 		logger.info("Starting thread count: " +  numberOfThreads);
 		executorService = Executors.newFixedThreadPool(numberOfThreads);
