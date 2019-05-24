@@ -2,10 +2,11 @@ package com.example.demo;
 
 import java.io.FileWriter;
 import java.io.PrintWriter;
+import java.text.SimpleDateFormat;
 import java.time.Duration;
 import java.time.Instant;
+import java.util.Date;
 import java.util.UUID;
-import java.util.concurrent.TimeUnit;
 
 import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.html.HtmlAnchor;
@@ -18,6 +19,7 @@ import com.gargoylesoftware.htmlunit.html.HtmlTextInput;
 public class TokenExtractor {
 
 //	private Logger logger = LoggerFactory.getLogger(this.getClass());
+	static SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ");
 
 	public static Runnable getRunnable(final String username, final String password) throws Exception {
 		return new Runnable() {		
@@ -28,26 +30,26 @@ public class TokenExtractor {
 				try {
 					fileWriter = new FileWriter(UUID.randomUUID().toString());
 					writer = new PrintWriter(fileWriter);
-				} catch (Exception ex) {
-					ex.printStackTrace();
-				}
+					writer.println("Start time,IFrame Retrieval(ms),Credential Check(ms),Token Retrieval(ms),Total Duration(ms)");
+			
 				while(true)
 				{
-					try {
+
+						writer.print(sdf.format(new Date())+",");
 						Instant start = Instant.now();
 						getToken(username, password, writer);
 						Instant end = Instant.now();
 						writer.println( Duration.between(start, end).toMillis());
 						writer.flush();
-					} catch (Exception e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-						writer.close();
-					}
 
 				}
 
-
+				} catch (Exception ex) {
+					ex.printStackTrace();
+				}
+				finally {
+					writer.close();
+				}
 
 				
 			}
@@ -57,19 +59,22 @@ public class TokenExtractor {
 	//	return tokenURL.substring(tokenURL.indexOf("=")+1);		
 	}
 	
-	private static void getToken(final String username, final String password, final PrintWriter writer) throws Exception {
+	private static void getToken(final String username, final String password, final PrintWriter writer)  {
 		WebClient webClient = new WebClient();
+		try {
 		webClient.getOptions().setCssEnabled(false);
 		webClient.getOptions().setRedirectEnabled(false);
 		//webClient.getOptions().setPrintContentOnFailingStatusCode(true);
 		webClient.getOptions().setThrowExceptionOnScriptError(false);
 		webClient.getOptions().setThrowExceptionOnFailingStatusCode(false);
 		Instant start = Instant.now();
-		HtmlPage page = webClient.getPage("https://auth.uat.toolkitsonline.com/SecureAuth45/SecureAuth.aspx?client_id=a219bc091b584ae5b828d2447ee2e1f7&redirect_uri=https://uat.dentalofficetoolkit.com/dot-ui/oidc-callback&scope=openid+profile+email+address+phone&response_type=id_token+token&state=f5a3e12b480e9d442c4396d42e97ea0fcc8830fb&nonce=f5a3e12b480e9d442c4396d42e97ea0fcc8830gg&masterCssURL=MFAStyleSheetWithPWReset.css");
+//		HtmlPage page = webClient.getPage("https://auth.uat.toolkitsonline.com/SecureAuth45/SecureAuth.aspx?client_id=a219bc091b584ae5b828d2447ee2e1f7&redirect_uri=https://uat.dentalofficetoolkit.com/dot-ui/oidc-callback&scope=openid+profile+email+address+phone&response_type=id_token+token&state=f5a3e12b480e9d442c4396d42e97ea0fcc8830fb&nonce=f5a3e12b480e9d442c4396d42e97ea0fcc8830gg&masterCssURL=MFAStyleSheetWithPWReset.css");
+		//		HtmlPage page = webClient.getPage("https://auth.toolkitsonline.com/SecureAuth18/SecureAuth.aspx?client_id=d0bbeab5dcce4901a1d5b5dcaebe0781&redirect_uri=https://prd.dentalofficetoolkit.com/dot-ui/oidc-callback&scope=openid+profile+email+address+phone&response_type=id_token+token&state=f5a3e12b480e9d442c4396d42e97ea0fcc8830fb&nonce=f5a3e12b480e9d442c4396d42e97ea0fcc8830gg&masterCssURL=MFAStyleSheetWithPWReset.css");
+		HtmlPage page = webClient.getPage("https://auth.toolkitsonline.com/SecureAuth28/SecureAuth.aspx?client_id=d0bbeab5dcce4901a1d5b5dcaebe0781&redirect_uri=https://prd.dentalofficetoolkit.com/dot-ui/oidc-callback&scope=openid+profile+email+address+phone&response_type=id_token+token&state=f5a3e12b480e9d442c4396d42e97ea0fcc8830fb&nonce=f5a3e12b480e9d442c4396d42e97ea0fcc8830gg&masterCssURL=MFAStyleSheetWithPWReset.css");
+
+		//		HtmlPage page = webClient.getPage("https://auth.uat.toolkitsonline.com/SecureAuth88/SecureAuth.aspx?client_id=a219bc091b584ae5b828d2447ee2e1f7&redirect_uri=https://uat.dentalofficetoolkit.com/dot-ui/oidc-callback&scope=openid+profile+email+address+phone&response_type=id_token+token&state=f5a3e12b480e9d442c4396d42e97ea0fcc8830fb&nonce=f5a3e12b480e9d442c4396d42e97ea0fcc8830gg&masterCssURL=MFAStyleSheetWithPWReset.css");
 		Instant end = Instant.now();
 		writer.print(Duration.between(start, end).toMillis()+",");
-		//		HtmlPage page = webClient.getPage("https://auth.toolkitsonline.com/SecureAuth18/SecureAuth.aspx?client_id=d0bbeab5dcce4901a1d5b5dcaebe0781&redirect_uri=https://prd.dentalofficetoolkit.com/dot-ui/oidc-callback&scope=openid+profile+email+address+phone&response_type=id_token+token&state=f5a3e12b480e9d442c4396d42e97ea0fcc8830fb&nonce=f5a3e12b480e9d442c4396d42e97ea0fcc8830gg&masterCssURL=MFAStyleSheetWithPWReset.css");
-//		HtmlPage page = webClient.getPage("https://auth.uat.toolkitsonline.com/SecureAuth88/SecureAuth.aspx?client_id=a219bc091b584ae5b828d2447ee2e1f7&redirect_uri=https://uat.dentalofficetoolkit.com/dot-ui/oidc-callback&scope=openid+profile+email+address+phone&response_type=id_token+token&state=f5a3e12b480e9d442c4396d42e97ea0fcc8830fb&nonce=f5a3e12b480e9d442c4396d42e97ea0fcc8830gg&masterCssURL=MFAStyleSheetWithPWReset.css");
 		
 		HtmlForm form = (HtmlForm) page.getElementById("aspnetForm");
 		
@@ -93,10 +98,16 @@ public class TokenExtractor {
 		HtmlPage page3 = ahref.click();
 		end = Instant.now();
 		writer.print(Duration.between(start, end).toMillis()+",");
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		} finally
+		{
+			webClient.close();
+		}
 		
 		//HtmlAnchor tokenHref =  page3.getAnchorByText("here");		
 		//String tokenURL = tokenHref.getHrefAttribute();
-		webClient.close();
+		
 		//return tokenURL.substring(tokenURL.indexOf("=")+1);	
 
 	}

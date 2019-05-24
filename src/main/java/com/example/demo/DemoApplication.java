@@ -1,9 +1,16 @@
 package com.example.demo;
 
+import java.text.SimpleDateFormat;
+import java.time.Instant;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
+import java.time.temporal.ChronoField;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.IntStream;
 
 import org.slf4j.Logger;
@@ -34,13 +41,15 @@ public class DemoApplication implements CommandLineRunner {
 			System.exit(0);
 		}
 		List<UsernamePassword> userList = new ArrayList<UsernamePassword>();
-//		userList.add(new UsernamePassword("mbatth1", "Test@123"));
-		IntStream.range(1, 1001).forEach(i -> userList.add(new UsernamePassword("uatptuser"+i, "Test@123")));
-//		IntStream.range(2, 7).forEach(i -> userList.add(new UsernamePassword("prdptuser"+i, "Test@123")));
+		userList.add(new UsernamePassword("prdptuser1", "Glypti96"));
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ");
+		System.out.println("Starting Test at: " + sdf.format(new Date()));
+//		IntStream.range(1, 1001).forEach(i -> userList.add(new UsernamePassword("uatptuser"+i, "Test@123")));
+		IntStream.range(2, 7).forEach(i -> userList.add(new UsernamePassword("prdptuser"+i, "Test@123")));
 
 		logger.info("Starting thread count: " +  numberOfThreads);
 		executorService = Executors.newFixedThreadPool(numberOfThreads);
-	
+
 		IntStream.range(startIndex, endIndex).forEach(i -> {
 			try {
 				UsernamePassword credentials = userList.get(i);
@@ -49,9 +58,9 @@ public class DemoApplication implements CommandLineRunner {
 			} catch (Exception e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
-			}
+			} 
 		});
-		
+
 	}
 	
 	public class UsernamePassword {
