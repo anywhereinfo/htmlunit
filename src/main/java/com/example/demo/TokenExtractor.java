@@ -6,6 +6,8 @@ import java.text.SimpleDateFormat;
 import java.time.Duration;
 import java.time.Instant;
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.UUID;
 
 import com.gargoylesoftware.htmlunit.WebClient;
@@ -27,6 +29,8 @@ public class TokenExtractor {
 			public void run() {
 				FileWriter fileWriter = null;
 				PrintWriter writer = null;
+				Set<String> tokens = new HashSet<String>(50000);
+				
 				try {
 					fileWriter = new FileWriter(UUID.randomUUID().toString());
 					writer = new PrintWriter(fileWriter);
@@ -37,9 +41,9 @@ public class TokenExtractor {
 
 						writer.print(sdf.format(new Date())+",");
 						Instant start = Instant.now();
-						getToken(username, password, writer);
+						getToken(username, password, writer, tokens);
 						Instant end = Instant.now();
-						writer.println( Duration.between(start, end).toMillis());
+						writer.println( Duration.between(start, end).toMillis()+","+ tokens.size());
 						writer.flush();
 
 				}
@@ -59,7 +63,7 @@ public class TokenExtractor {
 	//	return tokenURL.substring(tokenURL.indexOf("=")+1);		
 	}
 	
-	private static void getToken(final String username, final String password, final PrintWriter writer)  {
+	private static void getToken(final String username, final String password, final PrintWriter writer, final Set<String> tokens)  {
 		WebClient webClient = new WebClient();
 		try {
 		webClient.getOptions().setCssEnabled(false);
@@ -98,6 +102,21 @@ public class TokenExtractor {
 		HtmlPage page3 = ahref.click();
 		end = Instant.now();
 		writer.print(Duration.between(start, end).toMillis()+",");
+		
+		HtmlAnchor tokenHref =  page3.getAnchorByText("here");		
+		String tokenURL = tokenHref.getHrefAttribute();
+		if (tokenURL == null)
+			throw new Exception("Token is null");
+		else
+			{
+				String token = tokenURL.substring(tokenURL.indexOf("=")+1);
+				if (token == null)
+					throw new Exception("token is null");
+				if (!tokens.add(token))
+					throw new Exception("token already exists");
+				
+			}
+		//return tokenURL.substring(tokenURL.indexOf("=")+1);
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		} finally
