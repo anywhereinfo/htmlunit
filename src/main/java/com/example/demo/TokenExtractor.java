@@ -23,7 +23,7 @@ public class TokenExtractor {
 //	private Logger logger = LoggerFactory.getLogger(this.getClass());
 	static SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ");
 
-	public static Runnable getRunnable(final String username, final String password) throws Exception {
+	public static Runnable getRunnable(final String username, final String password, final String secureAuthURL) throws Exception {
 		return new Runnable() {		
 			@Override
 			public void run() {
@@ -41,7 +41,7 @@ public class TokenExtractor {
 
 						writer.print(sdf.format(new Date())+",");
 						Instant start = Instant.now();
-						getToken(username, password, writer, tokens);
+						getToken(username, password, writer, tokens, secureAuthURL);
 						Instant end = Instant.now();
 						writer.println( Duration.between(start, end).toMillis()+","+ tokens.size());
 						writer.flush();
@@ -63,7 +63,7 @@ public class TokenExtractor {
 	//	return tokenURL.substring(tokenURL.indexOf("=")+1);		
 	}
 	
-	private static void getToken(final String username, final String password, final PrintWriter writer, final Set<String> tokens)  {
+	private static void getToken(final String username, final String password, final PrintWriter writer, final Set<String> tokens, final String secureAuthURL)  {
 		WebClient webClient = new WebClient();
 		try {
 		webClient.getOptions().setCssEnabled(false);
@@ -74,7 +74,7 @@ public class TokenExtractor {
 		Instant start = Instant.now();
 //		HtmlPage page = webClient.getPage("https://auth.uat.toolkitsonline.com/SecureAuth45/SecureAuth.aspx?client_id=a219bc091b584ae5b828d2447ee2e1f7&redirect_uri=https://uat.dentalofficetoolkit.com/dot-ui/oidc-callback&scope=openid+profile+email+address+phone&response_type=id_token+token&state=f5a3e12b480e9d442c4396d42e97ea0fcc8830fb&nonce=f5a3e12b480e9d442c4396d42e97ea0fcc8830gg&masterCssURL=MFAStyleSheetWithPWReset.css");
 		//		HtmlPage page = webClient.getPage("https://auth.toolkitsonline.com/SecureAuth18/SecureAuth.aspx?client_id=d0bbeab5dcce4901a1d5b5dcaebe0781&redirect_uri=https://prd.dentalofficetoolkit.com/dot-ui/oidc-callback&scope=openid+profile+email+address+phone&response_type=id_token+token&state=f5a3e12b480e9d442c4396d42e97ea0fcc8830fb&nonce=f5a3e12b480e9d442c4396d42e97ea0fcc8830gg&masterCssURL=MFAStyleSheetWithPWReset.css");
-		HtmlPage page = webClient.getPage("https://auth.toolkitsonline.com/SecureAuth28/SecureAuth.aspx?client_id=d0bbeab5dcce4901a1d5b5dcaebe0781&redirect_uri=https://prd.dentalofficetoolkit.com/dot-ui/oidc-callback&scope=openid+profile+email+address+phone&response_type=id_token+token&state=f5a3e12b480e9d442c4396d42e97ea0fcc8830fb&nonce=f5a3e12b480e9d442c4396d42e97ea0fcc8830gg&masterCssURL=MFAStyleSheetWithPWReset.css");
+		HtmlPage page = webClient.getPage(secureAuthURL);
 
 		//		HtmlPage page = webClient.getPage("https://auth.uat.toolkitsonline.com/SecureAuth88/SecureAuth.aspx?client_id=a219bc091b584ae5b828d2447ee2e1f7&redirect_uri=https://uat.dentalofficetoolkit.com/dot-ui/oidc-callback&scope=openid+profile+email+address+phone&response_type=id_token+token&state=f5a3e12b480e9d442c4396d42e97ea0fcc8830fb&nonce=f5a3e12b480e9d442c4396d42e97ea0fcc8830gg&masterCssURL=MFAStyleSheetWithPWReset.css");
 		Instant end = Instant.now();
