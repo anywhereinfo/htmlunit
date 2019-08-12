@@ -11,7 +11,7 @@
 
 For example, in order to run against SecureAuth31, with one thread and first username/password combination from the file, execute the command
 
-java -jar target/demo-0.0.1-SNAPSHOT.jar 1 0 'https://auth.toolkitsonline.com/SecureAuth31/SecureAuth.aspx?client_id=d0bbeab5dcce4901a1d5b5dcaebe0781&redirect_uri=https://dot.prod.prd.local-os/dot-ui/oidc-callback&scope=openid+profile+email+address+phone&response_type=id_token+token&state=f5a3e12b480e9d442c4396d42e97ea0fcc8830fb&nonce=FYxhrC8KcIfmKryTkUSBO8Ao75ZLqDNjv3OdpgrX&masterCssURL=MFAStyleSheetWithPWReset.css'
+java -jar target/demo-0.0.1-SNAPSHOT.jar 1 0 'https://auth.toolkitsonline.com/SecureAuth31/SecureAuth.aspx?client_id=d5b5dcaebe0781&redirect_uri=https://ocal-os/dot-ui/oiscope=openid+profile+email+address+phone&response_type=id_token+token&state=4396d42e97ea0fcc8830fb&nonce=FYBO8Ao75ZLqDNjv3OdpgrX&masterCssURL=MFAStyleSheetWithPWReset.css'
 
 You can run multiple copies of this program by supplying different start index in the creds file. For example if you have 20 enteries in creds file , you can run 2 instances of the program as follows
 
